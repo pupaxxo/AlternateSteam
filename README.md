@@ -1,4 +1,4 @@
-AllternateSteam
+AlternateSteam
 ===============
 
 An alternate version of steam.
