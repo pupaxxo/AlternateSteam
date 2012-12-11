@@ -9,12 +9,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
+
+import net.as.utils.MsgUtils;
 
 public class MainFrame extends JFrame {
 	/**
@@ -108,9 +109,12 @@ public class MainFrame extends JFrame {
 		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(instance, "TEST", "ERROR!",
-						JOptionPane.ERROR_MESSAGE);
+				MsgUtils.msg(1, "Testing MSGUTILS", "WARNING");
 			}
 		});
+	}
+
+	public static MainFrame getInstance() {
+		return instance;
 	}
 }
