@@ -1,10 +1,15 @@
 package net.as.panes;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.MalformedURLException;
+import java.net.URL;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import net.as.data.Game;
@@ -47,7 +52,8 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 
 	@Override
 	public void onGameAdded(Game game) {
-		System.out.println(game.getName() + "" + game.getDesc());
+		System.out.println(game.getName() + " " + game.getDesc() + " "
+				+ game.getLogo());
 		addGame(game);
 	}
 
@@ -61,9 +67,20 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 		}
 		p.setLayout(null);
 		p.setBackground(new Color(218, 111, 5));
-		JTextArea filler = new JTextArea(game.getName());
+		JLabel logo;
+		try {
+			Image logoimg = Toolkit.getDefaultToolkit().createImage(
+					new URL(game.getLogo()));
+			logoimg = logoimg.getScaledInstance(42, 42, Image.SCALE_DEFAULT);
+			logo = new JLabel(new ImageIcon(logoimg));
+			logo.setBounds(6, 6, 42, 42);
+			logo.setVisible(true);
+			p.add(logo);
+		} catch (MalformedURLException e) {
+		}
+		JLabel filler = new JLabel("<html><strong>" + game.getName()
+				+ "</strong></html>");
 		filler.setBorder(null);
-		filler.setEditable(false);
 		filler.setForeground(Color.white);
 		filler.setBounds(58, 6, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
@@ -72,5 +89,4 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 		gamesScroll.revalidate();
 		games.repaint();
 	}
-
 }
