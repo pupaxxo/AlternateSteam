@@ -24,6 +24,7 @@ public class GameInfoPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private final JEditorPane gameInfo;
 	private JLabel logo;
+	private final JScrollPane infoScroll;
 
 	public GameInfoPane() {
 		super();
@@ -46,7 +47,7 @@ public class GameInfoPane extends JPanel {
 		add(gameInfo);
 		gameInfo.revalidate();
 		gameInfo.repaint();
-		JScrollPane infoScroll = new JScrollPane();
+		infoScroll = new JScrollPane();
 		infoScroll.setBounds(10, 210, 560, 240);
 		infoScroll
 				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -75,11 +76,13 @@ public class GameInfoPane extends JPanel {
 		try {
 			logoimg = Toolkit.getDefaultToolkit().createImage(
 					new URL(LinkUtils.getGithubLink(image)));
-			remove(logo);
-			logo = new JLabel(new ImageIcon(logoimg));
-			logo.setBounds(10, 10, 560, 190);
-			add(logo);
+			logo.setIcon(new ImageIcon(logoimg));
 		} catch (MalformedURLException e) {
 		}
+		gameInfo.repaint();
+		gameInfo.revalidate();
+		infoScroll.repaint();
+		infoScroll.revalidate();
+
 	}
 }
