@@ -17,5 +17,6 @@ public class GamesPane extends JPanel implements ILauncherPane, GameListener {
 
 	@Override
 	public void onGameAdded(Game game) {
+		System.out.println(game.getName() + "" + game.getDesc());
 	}
 }

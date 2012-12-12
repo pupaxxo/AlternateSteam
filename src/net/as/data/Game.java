@@ -9,6 +9,7 @@ import net.as.workers.GamesLoader;
 public class Game {
 	public static ArrayList<Game> games = new ArrayList<Game>();
 	private static List<GameListener> listeners = new ArrayList<GameListener>();
+	private final String name, desc;
 
 	public static void loadAll() {
 		GamesLoader loader = new GamesLoader();
@@ -19,7 +20,7 @@ public class Game {
 		listeners.add(listener);
 	}
 
-	public static void addPack(Game game) {
+	public static void addGame(Game game) {
 		synchronized (games) {
 			games.add(game);
 		}
@@ -32,13 +33,23 @@ public class Game {
 		return games;
 	}
 
-	public static Game getPack(int i) {
+	public static Game getGame(int i) {
 
 		return games.get(i);
 
 	}
 
-	public Game() {
-
+	public Game(String name, String desc) {
+		this.name = name;
+		this.desc = desc;
 	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public String getDesc() {
+		return this.desc;
+	}
+
 }

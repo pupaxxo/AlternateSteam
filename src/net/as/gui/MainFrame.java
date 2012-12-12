@@ -15,6 +15,8 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
+import net.as.data.Game;
+import net.as.panes.GamesPane;
 import net.as.utils.MsgUtils;
 
 public class MainFrame extends JFrame {
@@ -23,6 +25,7 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static MainFrame instance = null;
+	public final GamesPane gamesPane;
 
 	/**
 	 * Launch the application.
@@ -112,6 +115,9 @@ public class MainFrame extends JFrame {
 				MsgUtils.msg(1, "Testing MSGUTILS", "WARNING");
 			}
 		});
+		gamesPane = new GamesPane();
+		Game.addListener(gamesPane);
+		Game.loadAll();
 	}
 
 	public static MainFrame getInstance() {
