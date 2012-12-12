@@ -13,6 +13,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
 import net.as.data.Game;
+import net.as.panes.GameInfoPane;
 import net.as.panes.GamesListPane;
 
 public class MainFrame extends JFrame {
@@ -22,6 +23,7 @@ public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static MainFrame instance = null;
 	public final GamesListPane gamesPane;
+	public final GameInfoPane gameInfo;
 
 	/**
 	 * Launch the application.
@@ -104,6 +106,9 @@ public class MainFrame extends JFrame {
 		Game.loadAll();
 		gamesPane.setBounds(0, 0, 220, 480);
 		panel.add(gamesPane);
+		gameInfo = new GameInfoPane();
+		gameInfo.setBounds(230, 30, 580, 460);
+		panel.add(gameInfo);
 	}
 
 	public static MainFrame getInstance() {

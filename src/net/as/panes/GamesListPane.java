@@ -1,10 +1,14 @@
 package net.as.panes;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -23,8 +27,8 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 	private static final long serialVersionUID = 1L;
 	private final JPanel games;
 	private final JScrollPane gamesScroll;
-	private int gameIndex = 0;
-	private final boolean added = false;
+	private int selectedGame = 0;
+	public static ArrayList<JPanel> gamePanels;
 
 	public GamesListPane() {
 		super();
@@ -43,7 +47,7 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 		gamesScroll.setOpaque(false);
 		gamesScroll.setViewportView(games);
 		add(gamesScroll);
-
+		gamePanels = new ArrayList<JPanel>();
 	}
 
 	@Override
@@ -58,15 +62,36 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 	}
 
 	public void addGame(Game game) {
-		gameIndex = gameIndex + 1;
 		final JPanel p = new JPanel();
-		if (added) {
-			p.setBounds(0, (gameIndex * 55), 300, 55);
-		} else {
-			p.setBounds(0, (0 * 55), 300, 55);
-		}
+		final int gameIndex = gamePanels.size();
+		p.setBounds(0, (gameIndex * 55), 300, 55);
 		p.setLayout(null);
 		p.setBackground(new Color(218, 111, 5));
+		MouseListener lin = new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				selectedGame = gameIndex;
+				selectGame();
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				selectedGame = gameIndex;
+				selectGame();
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+		};
 		JLabel logo;
 		try {
 			Image logoimg = Toolkit.getDefaultToolkit().createImage(
@@ -75,6 +100,7 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 			logo = new JLabel(new ImageIcon(logoimg));
 			logo.setBounds(6, 6, 42, 42);
 			logo.setVisible(true);
+			logo.addMouseListener(lin);
 			p.add(logo);
 		} catch (MalformedURLException e) {
 		}
@@ -85,8 +111,27 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 		filler.setBounds(58, 6, 378, 42);
 		filler.setBackground(new Color(255, 255, 255, 0));
 		p.add(filler);
+		p.addMouseListener(lin);
+		filler.addMouseListener(lin);
+		gamePanels.add(p);
 		games.add(p);
 		gamesScroll.revalidate();
 		games.repaint();
+		System.out.println("Added : " + game.getName() + " ID : " + gameIndex);
+	}
+
+	public void selectGame() {
+		for (int i = 0; i < gamePanels.size(); i++) {
+			if (selectedGame == i) {
+				gamePanels.get(i)
+						.setBackground(new Color(218, 111, 5).darker());
+				gamePanels.get(i).setCursor(
+						Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			} else {
+				gamePanels.get(i).setBackground(new Color(218, 111, 5));
+				gamePanels.get(i).setCursor(
+						Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			}
+		}
 	}
 }
