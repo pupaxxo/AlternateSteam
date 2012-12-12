@@ -59,18 +59,23 @@ public class Game {
 		this.splash = splash;
 		String installPath = FileUtils.getDynamicStorageLocation();
 		File tempDir = new File(installPath, "Games" + File.separator + cname);
+		tempDir.mkdirs();
 		URL url_;
 		try {
+			new File(tempDir, cname + "_icon.png").createNewFile();
 			url_ = new URL(LinkUtils.getGithubLink(logo));
-			this.logoimg = Toolkit.getDefaultToolkit().createImage(url_);
 			BufferedImage tempImg = ImageIO.read(url_);
 			ImageIO.write(tempImg, "png",
 					new File(tempDir, cname + "_icon.png"));
+			this.logoimg = Toolkit.getDefaultToolkit().createImage(
+					new File(tempDir, cname + "_icon.png").toString());
 			tempImg.flush();
+			new File(tempDir, cname + ".jpg").createNewFile();
 			url_ = new URL(LinkUtils.getGithubLink(splash));
-			this.splashimg = Toolkit.getDefaultToolkit().createImage(url_);
 			tempImg = ImageIO.read(url_);
-			ImageIO.write(tempImg, "png", new File(tempDir, cname + ".jpg"));
+			ImageIO.write(tempImg, "jpg", new File(tempDir, cname + ".jpg"));
+			this.splashimg = Toolkit.getDefaultToolkit().createImage(
+					new File(tempDir, cname + ".jpg").toString());
 			tempImg.flush();
 		} catch (MalformedURLException e) {
 		} catch (IOException e) {

@@ -1,9 +1,14 @@
 package net.as.panes;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
@@ -15,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import net.as.utils.FileUtils;
 import net.as.utils.LinkUtils;
 
 public class GameInfoPane extends JPanel {
@@ -38,6 +44,10 @@ public class GameInfoPane extends JPanel {
 			@Override
 			public void hyperlinkUpdate(HyperlinkEvent event) {
 				if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+					try {
+						hLink(event.getURL().toURI());
+					} catch (URISyntaxException e) {
+					}
 				}
 			}
 		});
@@ -78,5 +88,28 @@ public class GameInfoPane extends JPanel {
 		infoScroll.repaint();
 		infoScroll.revalidate();
 
+	}
+
+	public void hLink(URI uri) {
+		if (Desktop.isDesktopSupported()) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.browse(uri);
+			} catch (Exception exc) {
+			}
+		} else if (FileUtils.getCurrentOS() == FileUtils.OS.UNIX) {
+			File xdg = new File("/usr/bin/xdg-open");
+			if (xdg.exists()) {
+				ProcessBuilder pb = new ProcessBuilder("/usr/bin/xdg-open",
+						uri.toString());
+				try {
+					pb.start();
+				} catch (IOException e) {
+
+				}
+			} else {
+			}
+		} else {
+		}
 	}
 }
