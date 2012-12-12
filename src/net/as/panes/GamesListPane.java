@@ -18,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.as.data.Game;
 import net.as.data.events.GameListener;
+import net.as.gui.MainFrame;
 
 public class GamesListPane extends JPanel implements ILauncherPane,
 		GameListener {
@@ -61,7 +62,7 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 		addGame(game);
 	}
 
-	public void addGame(Game game) {
+	public void addGame(final Game game) {
 		final JPanel p = new JPanel();
 		final int gameIndex = gamePanels.size();
 		p.setBounds(0, (gameIndex * 55), 300, 55);
@@ -72,6 +73,8 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 			public void mouseClicked(MouseEvent e) {
 				selectedGame = gameIndex;
 				selectGame();
+				MainFrame.getGameInfoInstance().setInfo(game.getDesc(),
+						game.getSplash());
 			}
 
 			@Override

@@ -60,12 +60,25 @@ public class GameInfoPane extends JPanel {
 		try {
 			logoimg = Toolkit.getDefaultToolkit().createImage(
 					new URL(LinkUtils.getGithubLink("altersteam.png")));
-			logoimg = logoimg.getScaledInstance(42, 42, Image.SCALE_DEFAULT);
+			logoimg = logoimg.getScaledInstance(338, 190, Image.SCALE_DEFAULT);
 			logo = new JLabel(new ImageIcon(logoimg));
 			logo.setBounds(10, 10, 560, 190);
 			add(logo);
 		} catch (MalformedURLException e) {
 		}
 
+	}
+
+	public void setInfo(String info, String image) {
+		gameInfo.setText(info);
+		Image logoimg;
+		try {
+			logoimg = Toolkit.getDefaultToolkit().createImage(new URL(image));
+			remove(logo);
+			logo = new JLabel(new ImageIcon(logoimg));
+			logo.setBounds(10, 10, 560, 190);
+			add(logo);
+		} catch (MalformedURLException e) {
+		}
 	}
 }

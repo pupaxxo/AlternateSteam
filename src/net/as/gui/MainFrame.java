@@ -22,8 +22,8 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static MainFrame instance = null;
-	public final GamesListPane gamesPane;
-	public final GameInfoPane gameInfo;
+	public static GamesListPane gamesPane;
+	public static GameInfoPane gameInfo;
 
 	/**
 	 * Launch the application.
@@ -113,5 +113,13 @@ public class MainFrame extends JFrame {
 
 	public static MainFrame getInstance() {
 		return instance;
+	}
+
+	public static GameInfoPane getGameInfoInstance() {
+		return gameInfo;
+	}
+
+	public static GamesListPane getGameListInstance() {
+		return gamesPane;
 	}
 }
