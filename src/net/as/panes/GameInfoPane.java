@@ -73,7 +73,8 @@ public class GameInfoPane extends JPanel {
 		gameInfo.setText(info);
 		Image logoimg;
 		try {
-			logoimg = Toolkit.getDefaultToolkit().createImage(new URL(image));
+			logoimg = Toolkit.getDefaultToolkit().createImage(
+					new URL(LinkUtils.getGithubLink(image)));
 			remove(logo);
 			logo = new JLabel(new ImageIcon(logoimg));
 			logo.setBounds(10, 10, 560, 190);

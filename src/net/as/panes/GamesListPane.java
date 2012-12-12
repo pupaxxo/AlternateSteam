@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 import net.as.data.Game;
 import net.as.data.events.GameListener;
 import net.as.gui.MainFrame;
+import net.as.utils.LinkUtils;
 
 public class GamesListPane extends JPanel implements ILauncherPane,
 		GameListener {
@@ -98,7 +99,7 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 		JLabel logo;
 		try {
 			Image logoimg = Toolkit.getDefaultToolkit().createImage(
-					new URL(game.getLogo()));
+					new URL(LinkUtils.getGithubLink(game.getLogo())));
 			logoimg = logoimg.getScaledInstance(42, 42, Image.SCALE_DEFAULT);
 			logo = new JLabel(new ImageIcon(logoimg));
 			logo.setBounds(6, 6, 42, 42);

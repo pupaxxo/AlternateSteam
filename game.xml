@@ -1,5 +1,5 @@
 <games>
-<game name="Far Cry 3" desc="Gioco molto bello con una grafica stupenda" icon="http://fc05.deviantart.net/fs70/f/2012/152/b/6/farcry3_icon_by_sidyseven-d51vmd7.png" image="http://www.bloginfo360.net/wp-content/uploads/2012/11/20095_farcry3-portada.jpg" />
-<game name="Assassin's Creed 3" desc="" icon="http://fc07.deviantart.net/fs71/f/2012/087/a/3/assassin__s_creed_3___icon_by_darhymes-d4u7552.png" image="http://www.hdwallpapers.in/walls/assassins_creed_3-HD.jpg" />
-<game name="BattleField 3" desc="" icon="http://files.softicons.com/download/game-icons/battlefield-3-game-icons-by-exhumed/png/512x512/Battlefield%203_3.png" image="http://www.battlefield3.it/wp-content/gallery/battlefield-3/B2K_Wallpaper.jpg" />
+<game name="Far Cry 3" desc="Gioco molto bello con una grafica stupenda" icon="/image/fc3_icon.png" image="/image/fc3.jpg" />
+<game name="Assassin's Creed 3" desc="" icon="/image/ac3_icon.png" image="/image/ac3.jpg" />
+<game name="BattleField 3" desc="" icon="/image/bf3_icon.png" image="/image/bf3.jpg" />
 </games>
