@@ -48,6 +48,7 @@ public class GamesLoader extends Thread {
 					.getTextContent(), gameAttr.getNamedItem("desc")
 					.getTextContent(), gameAttr.getNamedItem("icon")
 					.getTextContent(), gameAttr.getNamedItem("image")
+					.getTextContent(), gameAttr.getNamedItem("cname")
 					.getTextContent()));
 		}
 	}

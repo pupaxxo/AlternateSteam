@@ -1,5 +1,5 @@
 <games>
-<game name="Far Cry 3" desc="Gioco molto bello con una grafica stupenda" icon="/image/fc3_icon.png" image="/image/fc3.jpg" />
-<game name="Assassin's Creed 3" desc="" icon="/image/ac3_icon.png" image="/image/ac3.jpg" />
-<game name="BattleField 3" desc="" icon="/image/bf3_icon.png" image="/image/bf3.jpg" />
+<game name="Far Cry 3" desc="Gioco molto bello con una grafica stupenda" icon="/image/fc3_icon.png" image="/image/fc3.jpg" cname="fc3"/>
+<game name="Assassin's Creed 3" desc="" icon="/image/ac3_icon.png" image="/image/ac3.jpg" cname="ac3"/>
+<game name="BattleField 3" desc="" icon="/image/bf3_icon.png" image="/image/bf3.jpg" cname="bf3"/>
 </games>

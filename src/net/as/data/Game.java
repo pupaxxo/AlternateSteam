@@ -1,15 +1,27 @@
 package net.as.data;
 
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import net.as.data.events.GameListener;
+import net.as.utils.FileUtils;
+import net.as.utils.LinkUtils;
 import net.as.workers.GamesLoader;
 
 public class Game {
 	public static ArrayList<Game> games = new ArrayList<Game>();
 	private static List<GameListener> listeners = new ArrayList<GameListener>();
 	private final String name, desc, logo, splash;
+	private Image logoimg, splashimg;
 
 	public static void loadAll() {
 		GamesLoader loader = new GamesLoader();
@@ -39,11 +51,31 @@ public class Game {
 
 	}
 
-	public Game(String name, String desc, String logo, String splash) {
+	public Game(String name, String desc, String logo, String splash,
+			String cname) {
 		this.name = name;
 		this.desc = desc;
 		this.logo = logo;
 		this.splash = splash;
+		String installPath = FileUtils.getDynamicStorageLocation();
+		File tempDir = new File(installPath, "Games" + File.separator + cname);
+		URL url_;
+		try {
+			url_ = new URL(LinkUtils.getGithubLink(logo));
+			this.logoimg = Toolkit.getDefaultToolkit().createImage(url_);
+			BufferedImage tempImg = ImageIO.read(url_);
+			ImageIO.write(tempImg, "png",
+					new File(tempDir, cname + "_icon.png"));
+			tempImg.flush();
+			url_ = new URL(LinkUtils.getGithubLink(splash));
+			this.splashimg = Toolkit.getDefaultToolkit().createImage(url_);
+			tempImg = ImageIO.read(url_);
+			ImageIO.write(tempImg, "png", new File(tempDir, cname + ".jpg"));
+			tempImg.flush();
+		} catch (MalformedURLException e) {
+		} catch (IOException e) {
+		}
+
 	}
 
 	public String getName() {
@@ -62,4 +94,11 @@ public class Game {
 		return this.splash;
 	}
 
+	public Image getSplashImg() {
+		return this.splashimg;
+	}
+
+	public Image getLogoImg() {
+		return this.logoimg;
+	}
 }

@@ -70,15 +70,9 @@ public class GameInfoPane extends JPanel {
 
 	}
 
-	public void setInfo(String info, String image) {
+	public void setInfo(String info, Image image) {
 		gameInfo.setText(info);
-		Image logoimg;
-		try {
-			logoimg = Toolkit.getDefaultToolkit().createImage(
-					new URL(LinkUtils.getGithubLink(image)));
-			logo.setIcon(new ImageIcon(logoimg));
-		} catch (MalformedURLException e) {
-		}
+		logo.setIcon(new ImageIcon(image));
 		gameInfo.repaint();
 		gameInfo.revalidate();
 		infoScroll.repaint();

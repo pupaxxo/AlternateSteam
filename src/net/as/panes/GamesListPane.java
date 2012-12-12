@@ -3,11 +3,8 @@ package net.as.panes;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -19,7 +16,6 @@ import javax.swing.border.EmptyBorder;
 import net.as.data.Game;
 import net.as.data.events.GameListener;
 import net.as.gui.MainFrame;
-import net.as.utils.LinkUtils;
 
 public class GamesListPane extends JPanel implements ILauncherPane,
 		GameListener {
@@ -75,7 +71,7 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 				selectedGame = gameIndex;
 				selectGame();
 				MainFrame.getGameInfoInstance().setInfo(game.getDesc(),
-						game.getSplash());
+						game.getSplashImg());
 			}
 
 			@Override
@@ -97,17 +93,13 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 			}
 		};
 		JLabel logo;
-		try {
-			Image logoimg = Toolkit.getDefaultToolkit().createImage(
-					new URL(LinkUtils.getGithubLink(game.getLogo())));
-			logoimg = logoimg.getScaledInstance(42, 42, Image.SCALE_DEFAULT);
-			logo = new JLabel(new ImageIcon(logoimg));
-			logo.setBounds(6, 6, 42, 42);
-			logo.setVisible(true);
-			logo.addMouseListener(lin);
-			p.add(logo);
-		} catch (MalformedURLException e) {
-		}
+		Image logoimg = game.getLogoImg();
+		logoimg = logoimg.getScaledInstance(42, 42, Image.SCALE_DEFAULT);
+		logo = new JLabel(new ImageIcon(logoimg));
+		logo.setBounds(6, 6, 42, 42);
+		logo.setVisible(true);
+		logo.addMouseListener(lin);
+		p.add(logo);
 		JLabel filler = new JLabel("<html><strong>" + game.getName()
 				+ "</strong></html>");
 		filler.setBorder(null);
