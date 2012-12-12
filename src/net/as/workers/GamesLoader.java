@@ -46,6 +46,7 @@ public class GamesLoader extends Thread {
 			NamedNodeMap gameAttr = game.getAttributes();
 			Game.addGame(new Game(gameAttr.getNamedItem("name")
 					.getTextContent(), gameAttr.getNamedItem("desc")
+					.getTextContent(), gameAttr.getNamedItem("icon")
 					.getTextContent()));
 		}
 	}

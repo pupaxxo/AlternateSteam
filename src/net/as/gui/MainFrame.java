@@ -4,10 +4,7 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -16,8 +13,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
 import net.as.data.Game;
-import net.as.panes.GamesPane;
-import net.as.utils.MsgUtils;
+import net.as.panes.GamesListPane;
 
 public class MainFrame extends JFrame {
 	/**
@@ -25,7 +21,7 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static MainFrame instance = null;
-	public final GamesPane gamesPane;
+	public final GamesListPane gamesPane;
 
 	/**
 	 * Launch the application.
@@ -39,18 +35,17 @@ public class MainFrame extends JFrame {
 			@Override
 			public void run() {
 
-				Color baseColor = new Color(255, 255, 255);
-				Color baseColorControl = new Color(255, 50, 0);
+				Color baseColor = new Color(55, 55, 55);
 
 				UIManager.put("control", baseColor);
-				UIManager.put("text", new Color(255, 0, 0));
-				UIManager.put("nimbusBase", baseColorControl);
-				UIManager.put("nimbusFocus", baseColorControl);
-				UIManager.put("nimbusBorder", baseColorControl);
-				UIManager.put("nimbusLightBackground", baseColorControl);
-				UIManager.put("info", baseColorControl.brighter().brighter());
-				UIManager.put("nimbusSelectionBackground", baseColorControl
-						.brighter().brighter());
+				UIManager.put("text", new Color(222, 222, 222));
+				UIManager.put("nimbusBase", new Color(135, 67, 0));
+				UIManager.put("nimbusFocus", baseColor);
+				UIManager.put("nimbusBorder", baseColor);
+				UIManager.put("nimbusLightBackground", baseColor);
+				UIManager.put("info", baseColor.brighter().brighter());
+				UIManager.put("nimbusSelectionBackground", baseColor.brighter()
+						.brighter());
 
 				try {
 					for (LookAndFeelInfo info : UIManager
@@ -103,21 +98,12 @@ public class MainFrame extends JFrame {
 		panel.setBounds(0, 0, 850, 480);
 		panel.setLayout(null);
 		setContentPane(panel);
-		JButton button = new JButton(
-				"<html><strong><font size=\"5\">TESTING</font></strong></html>");
-		button.setText("TESTING");
-		button.setFont(f);
-		button.setBounds(10, 10, 150, 150);
-		panel.add(button);
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				MsgUtils.msg(1, "Testing MSGUTILS", "WARNING");
-			}
-		});
-		gamesPane = new GamesPane();
+
+		gamesPane = new GamesListPane();
 		Game.addListener(gamesPane);
 		Game.loadAll();
+		gamesPane.setBounds(0, 0, 220, 480);
+		panel.add(gamesPane);
 	}
 
 	public static MainFrame getInstance() {
