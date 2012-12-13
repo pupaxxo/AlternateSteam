@@ -15,6 +15,7 @@ import javax.swing.border.EmptyBorder;
 
 import net.as.data.Game;
 import net.as.data.events.GameListener;
+import net.as.gui.GameInfo;
 import net.as.gui.MainFrame;
 
 public class GamesListPane extends JPanel implements ILauncherPane,
@@ -27,6 +28,7 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 	private final JScrollPane gamesScroll;
 	private int selectedGame = 0;
 	public static ArrayList<JPanel> gamePanels;
+	private int click = 0;
 
 	public GamesListPane() {
 		super();
@@ -72,6 +74,13 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 				selectGame();
 				MainFrame.getGameInfoInstance().setInfo(game.getDesc(),
 						game.getSplashImg());
+				if (click == 2) {
+					click = 0;
+					GameInfo gi = new GameInfo(MainFrame.getInstance(), game);
+					gi.setVisible(true);
+				} else {
+					click = click + 1;
+				}
 			}
 
 			@Override
