@@ -3,6 +3,7 @@ package net.as.gui;
 import java.awt.Toolkit;
 
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.as.data.Game;
@@ -24,6 +25,10 @@ public class GameInfo extends JDialog {
 		panel.setLayout(null);
 		panel.setBounds(0, 0, 300, 140);
 		setContentPane(panel);
+		JLabel Gameinfo = new JLabel("GameInfo");
+
+		Gameinfo.setBounds(300, 65, 55, 66);
+
 	}
 
 }
