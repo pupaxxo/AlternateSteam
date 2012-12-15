@@ -1,7 +1,12 @@
 package net.as.utils;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.security.CodeSource;
 
 import net.as.gui.MainFrame;
@@ -55,4 +60,12 @@ public class FileUtils {
 			return OS.OTHER;
 		}
 	}
+
+	public static void downloadToFile(URL url, File file) throws IOException {
+		file.createNewFile();
+		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+		FileOutputStream fos = new FileOutputStream(file);
+		fos.getChannel().transferFrom(rbc, 0, 1 << 24);
+	}
+
 }

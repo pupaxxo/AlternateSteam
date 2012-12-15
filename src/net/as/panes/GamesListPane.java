@@ -28,7 +28,6 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 	private final JScrollPane gamesScroll;
 	private int selectedGame = 0;
 	public static ArrayList<JPanel> gamePanels;
-	private int click = 0;
 
 	public GamesListPane() {
 		super();
@@ -73,13 +72,14 @@ public class GamesListPane extends JPanel implements ILauncherPane,
 				selectedGame = gameIndex;
 				selectGame();
 				MainFrame.getGameInfoInstance().setInfo(game.getDesc(),
-						game.getSplashImg());
-				if (click == 2) {
-					click = 0;
+						game.getSplashImg(), game);
+				if (e.getClickCount() == 2) { // 2
 					GameInfo gi = new GameInfo(MainFrame.getInstance(), game);
 					gi.setVisible(true);
-				} else {
-					click = click + 1;
+				} else if (e.getClickCount() == 3) { // 3
+
+				} else { // 1
+
 				}
 			}
 

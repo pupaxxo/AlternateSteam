@@ -20,7 +20,7 @@ import net.as.workers.GamesLoader;
 public class Game {
 	public static ArrayList<Game> games = new ArrayList<Game>();
 	private static List<GameListener> listeners = new ArrayList<GameListener>();
-	private final String name, desc, logo, splash;
+	private final String name, desc, logo, splash, cname;
 	private Image logoimg, splashimg;
 
 	public static void loadAll() {
@@ -46,13 +46,12 @@ public class Game {
 	}
 
 	public static Game getGame(int i) {
-
 		return games.get(i);
-
 	}
 
 	public Game(String name, String desc, String logo, String splash,
 			String cname) {
+		this.cname = cname;
 		this.name = name;
 		this.desc = desc;
 		this.logo = logo;
@@ -91,6 +90,10 @@ public class Game {
 		return this.desc;
 	}
 
+	public String getCName() {
+		return this.cname;
+	}
+
 	public String getLogo() {
 		return this.logo;
 	}
@@ -105,5 +108,9 @@ public class Game {
 
 	public Image getLogoImg() {
 		return this.logoimg;
+	}
+
+	public String getCommand() {
+		return "download(https://raw.github.com/pupaxxo/Pupax-Launcher/master/119.jar,launcher.jar);copia(file1,file2);gioca();";
 	}
 }

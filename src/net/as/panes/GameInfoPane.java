@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -12,6 +14,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,6 +23,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import net.as.data.Game;
+import net.as.download.Command;
 import net.as.utils.FileUtils;
 import net.as.utils.LinkUtils;
 
@@ -31,6 +36,8 @@ public class GameInfoPane extends JPanel {
 	private final JEditorPane gameInfo;
 	private JLabel logo;
 	private final JScrollPane infoScroll;
+	private final JButton download;
+	private Game gioco;
 
 	public GameInfoPane() {
 		super();
@@ -77,17 +84,28 @@ public class GameInfoPane extends JPanel {
 			add(logo);
 		} catch (MalformedURLException e) {
 		}
-
+		download = new JButton(
+				"<html><strong><font color=\"rgb(0,0,0)\">Download</font></strong></html>");
+		download.setBounds(460, 20, 100, 30);
+		download.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Command.toCommand(gioco.getCommand(), gioco);
+			}
+		});
+		add(download, 1);
+		download.setVisible(false);
 	}
 
-	public void setInfo(String info, Image image) {
+	public void setInfo(String info, Image image, Game game) {
 		gameInfo.setText(info);
 		logo.setIcon(new ImageIcon(image));
 		gameInfo.repaint();
 		gameInfo.revalidate();
 		infoScroll.repaint();
 		infoScroll.revalidate();
-
+		download.setVisible(true);
+		gioco = game;
 	}
 
 	public void hLink(URI uri) {
