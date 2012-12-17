@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -24,6 +27,7 @@ public class MainFrame extends JFrame {
 	private static MainFrame instance = null;
 	public static GamesListPane gamesPane;
 	public static GameInfoPane gameInfo;
+	public static DownloadManager dlmg = new DownloadManager(2);
 
 	/**
 	 * Launch the application.
@@ -88,7 +92,6 @@ public class MainFrame extends JFrame {
 
 	public MainFrame(final int tab) {
 		Font f = new Font("Segoe UI", Font.PLAIN, 12);
-		// setResizable(false);
 		setFont(f);
 		setTitle("Electric! ( not Steam )");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
@@ -100,7 +103,7 @@ public class MainFrame extends JFrame {
 		panel.setBounds(0, 0, 850, 480);
 		panel.setLayout(null);
 		setContentPane(panel);
-
+		setResizable(false);
 		gamesPane = new GamesListPane();
 		Game.addListener(gamesPane);
 		Game.loadAll();
@@ -109,6 +112,16 @@ public class MainFrame extends JFrame {
 		gameInfo = new GameInfoPane();
 		gameInfo.setBounds(230, 30, 580, 460);
 		panel.add(gameInfo);
+		JToggleButton downloadManager = new JToggleButton(
+				"<html><strong><font color=\"rgb(0,0,0)\">Download Manager</font></strong></html>");
+		downloadManager.setBounds(665, 5, 150, 20);
+		downloadManager.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setDMVisible();
+			}
+		});
+		panel.add(downloadManager, 1);
 	}
 
 	public static MainFrame getInstance() {
@@ -121,5 +134,29 @@ public class MainFrame extends JFrame {
 
 	public static GamesListPane getGameListInstance() {
 		return gamesPane;
+	}
+
+	public static DownloadManager getDownloadManagerInstance() {
+		return dlmg;
+	}
+
+	public void setDMVisible(boolean mode) {
+		if (mode) {
+			if (!dlmg.isVisible()) {
+				dlmg.setVisible(true);
+			}
+		} else {
+			if (dlmg.isVisible()) {
+				dlmg.setVisible(false);
+			}
+		}
+	}
+
+	public void setDMVisible() {
+		if (dlmg.isVisible()) {
+			dlmg.setVisible(false);
+		} else {
+			dlmg.setVisible(true);
+		}
 	}
 }

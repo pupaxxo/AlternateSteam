@@ -3,6 +3,7 @@ package net.as.download;
 import java.io.File;
 
 import net.as.data.Game;
+import net.as.gui.MainFrame;
 import net.as.utils.FileUtils;
 import net.as.utils.MsgUtils;
 
@@ -39,6 +40,8 @@ public class Command {
 					new File(installPath).mkdir();
 					tempDir.mkdir();
 					new File(tempDir, "\\temp\\").mkdir();
+					MainFrame.getDownloadManagerInstance().addDownload(game);
+					// arg[0] = link arg[1] = path
 					// DirectDownloading d = new DirectDownloading(
 					// MainFrame.getInstance());
 					// d.setVisible(true);
