@@ -27,7 +27,7 @@ public class MainFrame extends JFrame {
 	private static MainFrame instance = null;
 	public static GamesListPane gamesPane;
 	public static GameInfoPane gameInfo;
-	public static DownloadManager dlmg = new DownloadManager(2);
+	public static DownloadManager dlmg = new DownloadManager();
 
 	/**
 	 * Launch the application.

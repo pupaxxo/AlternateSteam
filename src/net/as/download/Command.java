@@ -1,6 +1,8 @@
 package net.as.download;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import net.as.data.Game;
 import net.as.gui.MainFrame;
@@ -40,7 +42,14 @@ public class Command {
 					new File(installPath).mkdir();
 					tempDir.mkdir();
 					new File(tempDir, "\\temp\\").mkdir();
-					MainFrame.getDownloadManagerInstance().addDownload(game);
+					MainFrame.getDownloadManagerInstance().setVisible(true);
+					try {
+						MainFrame.getDownloadManagerInstance().Add(
+								new URL(arg[0]));
+
+					} catch (MalformedURLException e) {
+					}
+
 					// arg[0] = link arg[1] = path
 					// DirectDownloading d = new DirectDownloading(
 					// MainFrame.getInstance());

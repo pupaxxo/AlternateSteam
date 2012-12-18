@@ -1,41 +1,50 @@
 package net.as.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+import java.util.Observable;
+import java.util.Observer;
 
-import javax.swing.ImageIcon;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-import net.as.data.Game;
+import net.as.download.Download;
+import net.as.download.DownloadsTableModel;
+import net.as.download.ProgressRenderer;
 
-public class DownloadManager extends JFrame {
+public class DownloadManager extends JFrame implements Observer {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final JPanel downloads;
-	private final JScrollPane downloadsScroll;
-	private int selectedDownloads = 0;
-	public static ArrayList<JPanel> downloadsPanels;
+	private static DownloadsTableModel tableModel;
+	private static JTable table;
+	private static JButton pauseButton;
+	private static JButton resumeButton;
+	private static JButton cancelButton, clearButton;
+	public static Download selectedDownload;
+	private static boolean clearing;
 
-	public DownloadManager(final int tab) {
+	public DownloadManager() {
 		Color baseColor = new Color(55, 55, 55);
 
 		UIManager.put("control", baseColor);
-		UIManager.put("text", new Color(222, 222, 222));
+		UIManager.put("text", new Color(0, 0, 0));
 		UIManager.put("nimbusBase", new Color(135, 67, 0));
 		UIManager.put("nimbusFocus", baseColor);
 		UIManager.put("nimbusBorder", baseColor);
@@ -65,115 +74,146 @@ public class DownloadManager extends JFrame {
 
 			}
 		}
-		Font f = new Font("Segoe UI", Font.PLAIN, 12);
+
+		setTitle("Download Manager");
 		setResizable(false);
-		setFont(f);
-		setTitle("Electric download Manager");
-		setIconImage(Toolkit.getDefaultToolkit().getImage(
-				this.getClass().getResource("/image/logo_px.png")));
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 850, 560);
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 850, 480);
-		panel.setLayout(null);
-		setContentPane(panel);
-		downloads = new JPanel();
-		downloads.setLayout(null);
-		downloads.setOpaque(false);
-		downloadsScroll = new JScrollPane();
-		downloadsScroll.setBounds(0, 30, 220, 450);
-		downloadsScroll
-				.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		downloadsScroll
-				.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		downloadsScroll.setWheelScrollingEnabled(true);
-		downloadsScroll.setOpaque(false);
-		downloadsScroll.setViewportView(downloads);
-		add(downloadsScroll);
-		downloadsPanels = new ArrayList<JPanel>();
+		setSize(640, 480);
+		tableModel = new DownloadsTableModel();
+		table = new JTable(tableModel);
+		table.getSelectionModel().addListSelectionListener(
+				new ListSelectionListener() {
+					@Override
+					public void valueChanged(ListSelectionEvent e) {
+						tableSelectionChanged();
+					}
+				});
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		ProgressRenderer renderer = new ProgressRenderer(0, 100);
+		renderer.setStringPainted(true);
+		table.setDefaultRenderer(JProgressBar.class, renderer);
+		table.setRowHeight((int) renderer.getPreferredSize().getHeight());
+		JPanel downloadsPanel = new JPanel();
+		downloadsPanel.setBorder(BorderFactory.createTitledBorder("Downloads"));
+		downloadsPanel.setLayout(new BorderLayout());
+		downloadsPanel.add(new JScrollPane(table), BorderLayout.CENTER);
+		JPanel buttonsPanel = new JPanel();
+		pauseButton = new JButton("Pause");
+		pauseButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionPause();
+			}
+		});
+		pauseButton.setEnabled(false);
+		buttonsPanel.add(pauseButton);
+		resumeButton = new JButton("Resume");
+		resumeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionResume();
+			}
+		});
+		resumeButton.setEnabled(false);
+		buttonsPanel.add(resumeButton);
+		cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionCancel();
+			}
+		});
+		cancelButton.setEnabled(false);
+		buttonsPanel.add(cancelButton);
+		clearButton = new JButton("Clear");
+		clearButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actionClear();
+			}
+		});
+		clearButton.setEnabled(false);
+		buttonsPanel.add(clearButton);
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(downloadsPanel, BorderLayout.CENTER);
+		getContentPane().add(buttonsPanel, BorderLayout.SOUTH);
 	}
 
-	public void addDownload(final Game game) {
-		final JPanel p = new JPanel();
-		final int gameIndex = downloadsPanels.size();
-		p.setBounds(0, (gameIndex * 55), 300, 55);
-		p.setLayout(null);
-		p.setBackground(new Color(218, 111, 5));
-		MouseListener lin = new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				selectedDownloads = gameIndex;
-				selectDownload();
-				MainFrame.getGameInfoInstance().setInfo(game.getDesc(),
-						game.getSplashImg(), game);
-				if (e.getClickCount() == 2) { // 2
-					GameInfo gi = new GameInfo(MainFrame.getInstance(), game);
-					gi.setVisible(true);
-				} else if (e.getClickCount() == 3) { // 3
-
-				} else { // 1
-
-				}
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				selectedDownloads = gameIndex;
-				selectDownload();
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-		};
-		JLabel logo;
-		Image logoimg = game.getLogoImg();
-		logoimg = logoimg.getScaledInstance(42, 42, Image.SCALE_DEFAULT);
-		logo = new JLabel(new ImageIcon(logoimg));
-		logo.setBounds(6, 6, 42, 42);
-		logo.setVisible(true);
-		logo.addMouseListener(lin);
-		p.add(logo);
-		JLabel filler = new JLabel("<html><strong>" + game.getName()
-				+ "</strong></html>");
-		filler.setBorder(null);
-		filler.setForeground(Color.white);
-		filler.setBounds(58, 6, 378, 42);
-		filler.setBackground(new Color(255, 255, 255, 0));
-		p.add(filler);
-		p.addMouseListener(lin);
-		filler.addMouseListener(lin);
-		downloadsPanels.add(p);
-		downloads.add(p);
-		downloadsScroll.revalidate();
-		downloads.repaint();
-		System.out.println("Added : " + game.getName() + " ID : " + gameIndex);
+	public void Add(URL link) {
+		tableModel.addDownload(new Download(link));
 	}
 
-	public void selectDownload() {
-		for (int i = 0; i < downloadsPanels.size(); i++) {
-			if (selectedDownloads == i) {
-				downloadsPanels.get(i).setBackground(
-						new Color(218, 111, 5).darker());
-				downloadsPanels.get(i).setCursor(
-						Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-			} else {
-				downloadsPanels.get(i).setBackground(new Color(218, 111, 5));
-				downloadsPanels.get(i).setCursor(
-						Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			}
+	private void tableSelectionChanged() {
+		if (selectedDownload != null)
+			selectedDownload.deleteObserver(DownloadManager.this);
+		if (!clearing) {
+			selectedDownload = tableModel.getDownload(table.getSelectedRow());
+			selectedDownload.addObserver(DownloadManager.this);
+			updateButtons();
 		}
 	}
 
-	public void removeDownload(int sel) {
+	private void actionPause() {
+		selectedDownload.pause();
+		updateButtons();
+	}
 
+	private void actionResume() {
+		selectedDownload.resume();
+		updateButtons();
+	}
+
+	private void actionCancel() {
+		selectedDownload.cancel();
+		updateButtons();
+	}
+
+	public static void actionClear() {
+		clearing = true;
+		tableModel.clearDownload(table.getSelectedRow());
+		clearing = false;
+		selectedDownload = null;
+		updateButtons();
+	}
+
+	private static void updateButtons() {
+		if (selectedDownload != null) {
+			int status = selectedDownload.getStatus();
+			switch (status) {
+			case Download.DOWNLOADING:
+				pauseButton.setEnabled(true);
+				resumeButton.setEnabled(false);
+				cancelButton.setEnabled(true);
+				clearButton.setEnabled(false);
+				break;
+			case Download.PAUSED:
+				pauseButton.setEnabled(false);
+				resumeButton.setEnabled(true);
+				cancelButton.setEnabled(true);
+				clearButton.setEnabled(false);
+				break;
+			case Download.ERROR:
+				pauseButton.setEnabled(false);
+				resumeButton.setEnabled(true);
+				cancelButton.setEnabled(false);
+				clearButton.setEnabled(true);
+				break;
+			default:
+				pauseButton.setEnabled(false);
+				resumeButton.setEnabled(false);
+				cancelButton.setEnabled(false);
+				clearButton.setEnabled(true);
+			}
+		} else {
+			pauseButton.setEnabled(false);
+			resumeButton.setEnabled(false);
+			cancelButton.setEnabled(false);
+			clearButton.setEnabled(false);
+		}
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		if (selectedDownload != null && selectedDownload.equals(o))
+			updateButtons();
 	}
 }
