@@ -131,6 +131,7 @@ public class Download extends Observable implements Runnable {
 			if (status == DOWNLOADING) {
 				status = COMPLETE;
 				stateChanged();
+
 			}
 		} catch (Exception e) {
 			error();

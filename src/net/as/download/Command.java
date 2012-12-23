@@ -29,13 +29,13 @@ public class Command {
 				int endIndex = cmd.indexOf(")");
 				String path = cmd.substring(startIndex + 1, endIndex);
 				String[] arg = path.split(",");
-				if (arg.length != 2) {
+				if (arg.length != 1) {
 					MsgUtils.msg(
 							0,
 							"Errore nella lettura del metodo d'installazione. Contatta pupax@outlook.com per risolvere.",
 							"ERRORE");
 				} else {
-					// try {
+
 					String installPath = FileUtils.getDynamicStorageLocation();
 					File tempDir = new File(installPath, "Games"
 							+ File.separator + game.getCName());
@@ -49,15 +49,20 @@ public class Command {
 
 					} catch (MalformedURLException e) {
 					}
-
-					// arg[0] = link arg[1] = path
-					// DirectDownloading d = new DirectDownloading(
-					// MainFrame.getInstance());
-					// d.setVisible(true);
-
-					// } catch (MalformedURLException e) {
-					// e.printStackTrace();
-					// }
+				}
+			} else if (cmd.contains("copy")) {
+				int startIndex = cmd.indexOf("(");
+				int endIndex = cmd.indexOf(")");
+				String path = cmd.substring(startIndex + 1, endIndex);
+				String[] arg = path.split(",");
+				if (arg.length != 2) {
+					MsgUtils.msg(
+							0,
+							"Errore nella lettura del metodo d'installazione. Contatta pupax@outlook.com per risolvere.",
+							"ERRORE");
+				} else {
+					MsgUtils.msg(2, "Copia il file: " + arg[0]
+							+ "nella cartella " + arg[1], "FALLO");
 				}
 			}
 		}

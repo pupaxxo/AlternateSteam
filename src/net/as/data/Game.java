@@ -111,6 +111,6 @@ public class Game {
 	}
 
 	public String getCommand() {
-		return "download(https://raw.github.com/pupaxxo/Pupax-Launcher/master/119.jar,launcher.jar);copia(file1,file2);gioca();";
+		return "download(https://raw.github.com/pupaxxo/Pupax-Launcher/master/119.jar);copia(file1,file2);gioca();";
 	}
 }
